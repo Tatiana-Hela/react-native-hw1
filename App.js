@@ -11,6 +11,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
 
 const initialState = {
   login: "",
@@ -18,9 +20,17 @@ const initialState = {
   password: "",
 };
 
+const loadFonts = async () => {
+  await Font.loadAsync({
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+  });
+};
+
 export default function App() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const [isReady, setIsReady] = useState(false);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -28,6 +38,12 @@ export default function App() {
     console.log(state);
     setState(initialState);
   };
+
+  if (isReady) {
+    return (
+      <AppLoading startAsync={loadFonts} onFinish={() => setIsReady(true)} />
+    );
+  }
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
@@ -122,6 +138,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
+    fontFamily: "Roboto-Medium",
     fontSize: 30,
     lineHeight: 35,
     letterSpacing: 0.01,
@@ -129,6 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 27,
   },
   input: {
+    // fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
     height: 50,
@@ -159,6 +177,7 @@ const styles = StyleSheet.create({
   },
   textButton: {
     color: "#FFFFFF",
+    // fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
   },
